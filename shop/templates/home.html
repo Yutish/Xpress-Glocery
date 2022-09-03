@@ -1,0 +1,172 @@
+<!-- Image size 420x260 -->
+{% extends 'temp_basic.html'%}
+{% load static %}
+
+{% block title %}
+The Xpress Grocery
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<hr id="categories">
+<section class="text-black body-font">
+    <h1 class="text-4xl tracking-widest title-font mt-8 mb-4 text-center px-4 pt-4 uppercase">All categories</h1>
+    <hr>
+
+    <!-- Logic for consumer-wholesaler price pending -->
+    <!-- Display as column(1) for small screen -->
+    <div id="slide-small" class="hidden container px-5 py-2 mx-auto">
+        {% for products, category in all_products %}
+        <h1 class="text-lg uppercase text-xl tracking-widest title-font p-4 m-1 mt-8"><a class="hover:text-orange-500"
+                href="/all-products/{{category}}">{{category}} ></a>
+        </h1>
+
+        <div class="flex flex-wrap flex-col relative items-center mb-4 px-4 py-2">
+
+            {% for item in products|slice:"0:2" %}
+            <div class="w-full p-4 shadow-md rounded-md">
+                <a href="{{item.get_absolute_url}}"
+                    class="block relative h-48 rounded overflow-hidden shadow-lg cursor-pointer">
+                    <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+                        src="/media/{{item.image}}">
+                </a>
+                <div class="mt-2 p-2">
+                    <a href="{{item.get_absolute_url}}" class="hover:text-orange-500">
+                        <p class="title-font text-lg font-medium truncate">{{item.product_name}}</p>
+                    </a>
+                    <p class="mt-1 text-sm">MRP : <span class="line-through">&#8377 {{item.mrp}}</span></p>
+                    {% if user.is_authenticated %}
+                    {% if account_type == "P" %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.consumer_price}}</span></p>
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.wholesaler_price}}</span>
+                    </p>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 ###.##</span>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <span class="font-bold text-xs px-2">Click on the category to view more</span>
+        <hr>
+        {% endfor %}
+    </div>
+
+    <!-- Display as blocks(4) for medium screen -->
+    <div id="slide-medium" class="hidden container px-5 py-2 mx-auto">
+        {% for products, category in all_products %}
+        <h1 class="text-lg uppercase text-xl tracking-widest title-font p-4 ml-2 m-1 mt-8"><a
+                class="hover:text-orange-500" href="/all-products/{{category}}">{{category}} ></a>
+        </h1>
+
+        <div class="flex flex-wrap flex-row relative items-center mb-4 px-2 py-2">
+
+            {% for item in products|slice:"0:4" %}
+            <div class="w-1/2 p-2 shadow-md rounded-md">
+                <a href="{{item.get_absolute_url}}"
+                    class="block relative h-48 rounded overflow-hidden shadow-lg cursor-pointer">
+                    <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+                        src="/media/{{item.image}}">
+                </a>
+                <div class="mt-2 p-2">
+                    <a href="{{item.get_absolute_url}}" class="hover:text-orange-500">
+                        <p class="title-font text-lg font-medium truncate">{{item.product_name}}</p>
+                    </a>
+                    <p class="mt-1 text-sm">MRP : <span class="line-through">&#8377 {{item.mrp}}</span></p>
+                    {% if user.is_authenticated %}
+                    {% if account_type == "P" %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.consumer_price}}</span></p>
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.wholesaler_price}}</span>
+                    </p>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 ###.##</span>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+    <!-- Display as Sliders for large screen -->
+    <div id="slide-large" class="hidden container px-5 py-2 mx-auto">
+        {% for products, category in all_products %}
+        <h1 class="text-lg uppercase text-xl tracking-widest title-font p-4 ml-4 m-1 mt-8"><a
+                class="hover:text-orange-500" href="/all-products/{{category}}">{{category}} ></a>
+        </h1>
+
+        <div class="flex flex-wrap flex-row relative items-center mb-4">
+
+            <div class="Slides{{forloop.counter}} hidden fade">
+                <div class="flex flex-wrap md:px-4 lg:px-8 py-2">
+
+                    {% for item in products %}
+                    <div class="md:w-1/5 w-full shadow-md rounded-md">
+                        <a href="{{item.get_absolute_url}}"
+                            class="block relative h-48 rounded overflow-hidden shadow-lg cursor-pointer">
+                            <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+                                src="/media/{{item.image}}">
+                        </a>
+                        <div class="mt-2 p-2">
+                            <a href="{{item.get_absolute_url}}" class="hover:text-orange-500">
+                                <p class="title-font text-lg font-medium truncate">{{item.product_name}}</p>
+                            </a>
+                            <p class="mt-1 text-sm">MRP : <span class="line-through">&#8377 {{item.mrp}}</span></p>
+                            {% if user.is_authenticated %}
+                            {% if account_type == "P" %}
+                            <p class="text-md">Price :<span class="font-bold">&#8377 {{item.consumer_price}}</span></p>
+                            {% else %}
+                            <p class="text-md">Price :<span class="font-bold">&#8377 {{item.wholesaler_price}}</span>
+                            </p>
+                            {% endif %}
+                            {% else %}
+                            <p class="text-md">Price :<span class="font-bold">&#8377 ###.##</span>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:5 and forloop.counter > 0 and not forloop.last %}
+                </div>
+            </div>
+            <div class="Slides{{forloop.parentloop.counter}} hidden fade">
+                <div class="flex flex-wrap md:px-4 lg:px-8 py-2">
+                    {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+
+            <a class="left-0 rounded absolute cursor-pointer font-bold ease-linear delay-200 select-none hover:bg-black hover:bg-opacity-75 p-4 mx-2 z-10"
+                onclick="plusSlides(-1,'Slides{{forloop.counter}}',{{forloop.counter}})"><svg width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 19L8 12L15 5" stroke="#dd6b20" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </a>
+            <a class="right-0 rounded absolute cursor-pointer font-bold ease-linear delay-200 select-none hover:bg-black hover:bg-opacity-75 p-4 mx-2 z-10"
+                onclick="plusSlides(1,'Slides{{forloop.counter}}', {{forloop.counter}})"><svg width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 5L16 12L9 19" stroke="#dd6b20" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </a>
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'temp_header.html'%}
+{% load static %}
+{% block title %} The Xpress Grocery {% endblock %}
+
+{% block body %}
+<section class="text-black body-font overflow-hidden">
+    {% if user.is_authenticated %}
+    <!-- No Products in Cart -->
+    {% if delivered %}
+    <div class="section pt-32 flex flex-col items-center text-center h-screen bg-gray-200 m-1 md:m-4 border-2 rounded">
+        <p class="font-bold text-3xl">Your order list is empty!</p>
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                stroke="#ed8936" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <a href="/home"
+            class="flex text-white bg-orange-500 border-0 mx-auto mt-4 py-2 px-6 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded">Shop
+            Now</a>
+    </div>
+    {% else %}
+    <!--Cart section-->
+    <div class="container py-1 md:py-4 mx-auto mt-8 flex flex-col md:flex-row">
+        <div class="md:w-full p-2 m-1 my-2 cart-items overflow-hidden overflow-y-auto h-screen bg-gray-200 rounded">
+            <h1
+                class="relative text-3xl tracking-widest text-center py-1 border-gray-500 border-b-2 w-full capitalize font-title">
+                Undelivered Ordered Items</h1>
+
+            <div class="py-4 flex flex-col items-center md:items-start border-b-2 border-gray-500">
+
+                <div class="flex md:flex-row items-center justify-center w-full">
+                    <span class="text-lg px-2 py-4 w-2/4">Items</span>
+                    <span class="text-lg px-2 py-4 w-1/4">Amount</span>
+                    <span class="text-lg px-2 py-4 w-1/4">Order Time</span>
+                </div>
+                <div class="flex md:flex-row items-center justify-center w-full">
+
+                    <span class="text-lg px-2 py-4 w-2/4">{{items}}</span>
+                    <span class="text-lg px-2 py-4 w-1/4">&#8377; {{total_amount}}</span>
+                    <span class="text-lg px-2 py-4 w-1/4">{{receiving_time}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif  %}
+    {% else %}
+    <!-- Not an authenticated user -->
+    <div class="section pt-32 flex flex-col items-center text-center h-screen bg-gray-200 m-1 md:m-4 border-2 rounded">
+        <p class="font-bold text-3xl">Please login to access ths feature.</p>
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                stroke="#ed8936" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <a href="/"
+            class="flex text-white bg-orange-500 border-0 mx-auto mt-4 py-2 px-6 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded">Login</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!-- Included in about-us, address, checkout, index, registration -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/fromtail.css' %}">
+    {% block css %}{% endblock %}
+</head>
+
+<body class="bg-gray-100">
+
+    <header class="text-white body-font bg-orange-500 top-0 w-full z-20 shadow-md">
+        <div
+            class="flex items-center justify-center title-font font-medium items-center text-gray-900 mb-4 md:mb-0 cursor-pointer px-2 py-4 rounded">
+            <a href="/home" class="text-xl text-white font-bold title-font">The <span class="text-black">Xpress</span>
+                Grocery</a>
+        </div>
+    </header>
+
+    {% for message in messages %}
+    <div class="absolute bg-{{message.tags}}-100 border border-{{message.tags}}-400 text-{{message.tags}}-700 px-4 py-3 rounded w-full text-center"
+        role="alert">
+        <strong class="font-bold">{{message}}</strong>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display = 'None';">
+            <svg class="fill-current h-6 w-6 text-{{message.tags}}-500" role="button" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20">
+                <path
+                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+            </svg>
+        </span>
+
+    </div>
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+
+    <!-- {% block script %}{% endblock %} -->
+
+</body>
+
+</html>

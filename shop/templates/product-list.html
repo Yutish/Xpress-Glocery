@@ -1,0 +1,77 @@
+<!-- Image size 420x260 -->
+{% extends 'temp_basic.html'%}
+{% load static %}
+
+{% block title %}
+The Xpress Grocery
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block body %}
+<hr id="categories">
+<section class="text-black body-font">
+    <h1 class="text-4xl tracking-widest title-font mt-8 mb-4 text-center px-4 pt-4 uppercase">
+        {{category}}</h1>
+    <hr>
+
+    <div class="container px-5 pt-24 mx-auto">
+        <div class="flex flex-wrap -m-4">
+
+            {% for item in page_obj.object_list %}
+            <div class="lg:w-1/6 md:w-1/3 p-4 my-4 w-full rounded shadow-md">
+                <a href="{{item.get_absolute_url}}"
+                    class="block relative h-48 rounded overflow-hidden shadow-lg cursor-pointer">
+                    <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+                        src="/media/{{item.image}}">
+                </a>
+
+                <div class="mt-4">
+                    <a href="{{item.get_absolute_url}}" class="hover:text-orange-500">
+                        <p class="title-font text-lg font-medium truncate">{{item.product_name}}</p>
+                    </a>
+                    <p class="mt-1 text-sm">MRP : <span class="line-through">&#8377 {{item.mrp}}</span></p>
+                    {% if user.is_authenticated %}
+                    {% if account_type == "P" %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.consumer_price}}</span></p>
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 {{item.wholesaler_price}}</span></p>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold">&#8377 ###.##</span></p>
+                    {% endif %}
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="flex flex-row pt-8 pb-12 w-full justify-center items-center">
+        {% if page_obj.has_previous %}
+        <a href="?page={{page_obj.previous_page_number}}">
+            <svg class="mr-4" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 19L8 12L15 5" stroke="#dd6b20" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </a>
+        {% endif %}
+
+        <span class="text-bold text-md">{{page_obj.number}}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{page_obj.next_page_number}}">
+            <svg class="ml-4" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 5L16 12L9 19" stroke="#dd6b20" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

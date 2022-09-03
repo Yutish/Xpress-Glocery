@@ -1,0 +1,15 @@
+{
+  "name": "Express-Grocery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwind build shop/static/src/style.css -o  shop/static/css/fromtail.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^1.4.6"
+  }
+}

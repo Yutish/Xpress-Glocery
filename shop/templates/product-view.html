@@ -1,0 +1,109 @@
+<!-- Image size 400x400 -->
+{% extends 'temp_basic.html'%}
+{% load static %}
+
+{% block title %}
+{{product.product_name}} - The Xpress Grocery
+{% endblock %}
+
+<!-- {% block css %}{% endblock %} -->
+
+{% block body %}
+<!--Product Details-->
+<section class="text-black body-font overflow-hidden">
+    <div class="container px-4 py-10 mx-auto">
+        <div class="lg:w-4/5 mx-auto flex flex-wrap">
+            <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
+                src="/media/{{product.large_image}}">
+
+            <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+
+                <h2 class="text-sm title-font text-gray-500 tracking-widest">{{product.get_category_display}}</h2>
+                <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">{{product.product_name}}</h1>
+                <div class="flex flex-col items-baseline m-2 py-2">
+                    <span class="title-font font-medium text-md text-gray-900 mx-2">MRP : <span
+                            class="line-through">&#8377 {{product.mrp}}</span>
+                    </span>
+
+                    {% if user.is_authenticated %}
+                    {% if account_type == "P" %}
+                    <div class="flex flex-row flex-wrap items-baseline">
+                        <span class="title-font font-medium text-3xl text-gray-900 mx-2">Price : &#8377
+                            {{product.consumer_price}}</span>
+
+                        <span class="title-font font-medium text-sm text-gray-900 mx-2">(You Save : &#8377
+                            {{you_save}})</span>
+                    </div>
+                    {% else %}
+                    <div class="flex flex-row flex-wrap items-baseline">
+                        <span class="title-font font-medium text-3xl text-gray-900 mx-2">Price : &#8377
+                            {{product.wholesaler_price}}</span>
+
+                        <span class="title-font font-medium text-sm text-gray-900 mx-2">(You Save : &#8377
+                            {{you_save}})</span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <span class="title-font font-medium text-md text-gray-900 mx-2">MRP : <span
+                            class="line-through"></span>
+                        &#8377 ###.##</span>
+                    {% endif %}
+                </div>
+                {% if user.is_authenticated %}
+                <div class="flex mt-6 items-center pb-5 mb-5">
+                    <a href="{{product.get_add_to_cart_url}}"
+                        class="flex text-white bg-orange-500 border-0 mx-auto py-2 px-6 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded">Add
+                        to Cart
+                    </a>
+                </div>
+                {% endif %}
+                <p class="text-gray-900 text-md title-font font-medium leading-relaxed m-2 py-4 border-t-2 border-b-2">
+                    <span class="font-bold">Description </span>: {{product.desc}}</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+
+<!-- Specific Categories -->
+<section class="text-black body-font">
+    <div class="container px-5 py-2 mx-auto">
+        <h1 class="text-base text-xl tracking-widest title-font p-4 m-1 mt-8"><a class="hover:text-orange-500"
+                href="/all-products/{{product.get_category_display}}">Other
+                Products from
+                {{product.get_category_display}} ></a>
+        </h1>
+        <div class="flex flex-wrap -m-4 mb-2">
+
+            {% for item in other_products%}
+            <div class="lg:w-1/4 md:w-1/2 p-4 w-full shadow-xl rounded-md cursor-pointer">
+                <a href="{{item.get_absolute_url}}" class="block relative h-48 rounded overflow-hidden shadow-md">
+                    <img alt="ecommerce" class="object-cover object-center w-full h-full block"
+                        src="/media/{{item.image}}">
+                </a>
+                <div class="mt-2 p-2">
+                    <a href="{{item.get_absolute_url}}" class="hover:text-orange-500">
+                        <p class="title-font text-lg font-medium truncate">{{item.product_name}}</p>
+                    </a>
+                    <p class="mt-1 text-sm">MRP : <span class="line-through"> &#8377 {{item.mrp}}</span></p>
+                    {% if user.is_authenticated %}
+                    {% if account_type == "P" %}
+                    <p class="text-md">Price :<span class="font-bold"> &#8377 {{item.consumer_price}}</span>
+                    </p>
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold"> &#8377 {{item.wholesaler_price}}</span>
+                    </p>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-md">Price :<span class="font-bold"> &#8377 ###.##</span>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <hr>
+    </div>
+</section>
+{% endblock %}

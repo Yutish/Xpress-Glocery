@@ -1,0 +1,136 @@
+{% extends 'temp_basic.html'%}
+{% load static %}
+{% load cart_template_tags %}
+
+{% block title %}
+The Xpress Grocery
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<section class="text-black body-font overflow-hidden">
+    {% if user.is_authenticated %}
+    <!-- No Products in Cart -->
+    {% if order_items|length < 1 %}
+    <div class="section pt-32 flex flex-col items-center text-center h-screen bg-gray-200 m-1 md:m-4 border-2 rounded">
+        <p class="font-bold text-3xl">Your cart is empty!</p>
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                stroke="#ed8936" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <a href="/home"
+            class="flex text-white bg-orange-500 border-0 mx-auto mt-4 py-2 px-6 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded">Shop
+            Now</a>
+    </div>
+    {% else %}
+    <!--Cart section-->
+    <div class="container py-1 md:py-4 mx-auto mt-8 flex flex-col md:flex-row">
+        <div class="md:w-2/3 p-2 m-1 my-2 cart-items overflow-hidden overflow-y-auto h-screen bg-gray-200 rounded">
+            <h1
+                class="relative text-3xl tracking-widest text-center py-1 border-gray-500 border-b-2 w-full capitalize font-title">
+                cart items</h1>
+
+            {% for item in order_items %}
+            <div class="py-4 flex flex-col md:flex-row items-center md:items-start border-b-2 border-gray-500">
+                <div class="md:w-64 px-4 p-2 md:mb-0 mb-6 flex flex-col">
+                    <img alt="team" class="rounded-lg w-40 h-40 object-cover object-center sm:mb-0 mb-4"
+                        src="/media/{{item.product.image}}">
+                </div>
+
+                <div class="flex flex-col items-start w-full">
+                    <a href="{{item.product.get_absolute_url}}"
+                        class="text-lg font-titletext-gray-900 px-2 py-4 hover:text-orange-400 cursor-pointer">{{item.product.product_name}}</a>
+                    <div class="flex flex-row px-2 py-4 w-full md: w-1/2">
+                        <span class="focus:outline-none text-black inline-flex items-center px-4">
+                            <a href="{% url 'removeItemFromCart' item.product.slug %}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M15 12H9M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                        stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            &nbsp; {{item.quantity}} &nbsp;
+                            <a href="{% url 'addItemToCart' item.product.slug %}">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12 9V12M12 12V15M12 12H15M12 12H9M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                        stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                        </span>
+                        <a href="{% url 'removeFromCart' item.product.slug %}"
+                            class="focus:outline-none hover:text-orange-400 focus:text-orange-400 text-black inline-flex">
+                            <svg class="ml-4" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19 7L18.1327 19.1425C18.0579 20.1891 17.187 21 16.1378 21H7.86224C6.81296 21 5.94208 20.1891 5.86732 19.1425L5 7M10 11V17M14 11V17M15 7V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V7M4 7H20"
+                                    stroke="#e53e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></a>
+                    </div>
+                    <div class="flex flex-row px-2 py-4 w-full md: w-1/2 items-baseline">
+                        <span class="text-lg pr-2 font-bold">&#8377; {{item.get_total_item_price}}</span>
+                        <span class="text-sm pr-4 line-through">&#8377; {{item.get_total_mrp}}</span>
+                        <span class="text-sm px-4">You Save: &#8377; {{item.get_total_you_save}}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div
+            class="md:w-1/3 font-bold w-auto flex flex-col items-start font-title text-md text-black m-1 mt-2 md:ml-2 h-64 rounded mb-12">
+            <div
+                class="w-full font-bold w-auto flex flex-col items-start font-title text-md text-black p-4 h-64 bg-gray-200 rounded">
+
+                <span class="text-md font-bold py-1 uppercase border-gray-500 border-b-2 w-full">price details</span>
+                <div class="flex flex-col h-full w-full">
+                    <div class="flex flex-row justify-between items-baseline px-4 py-2 w-full">
+                        <span class="capitalize">price
+                            <span class="normal-case">({{request.user|cart_item_count}} items)</span>
+                        </span>
+                        <span class="ml-2">₹ {{billed_amount}}</span>
+                    </div>
+                    <div class="flex flex-row justify-between items-baseline px-4 py-2 w-full">
+                        <span class="capitalize">service charges</span>
+                        <span class="ml-2">₹ {{service_charge}}</span>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-row justify-between items-baseline px-4 py-2 w-full text-lg border-gray-500 border-b-2 border-t-2 border-dotted">
+                    <span class="capitalize">total amount</span>
+                    <span class="ml-2">₹ {{total_amount}}</span>
+                </div>
+                <div class="flex flex-row justify-between items-baseline px-2 py-1 w-full text-sm">
+                    <span class="capitalize">your savings</span>
+                    <span class="ml-2">₹ {{total_saving}}</span>
+                </div>
+
+            </div>
+            <a href="/checkout"
+                class="text-white bg-orange-500 border-0 py-2 px-8 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded text-md m-1 ml-0 w-full text-center">Check
+                Out</a>
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- Not an authenticated user -->
+    <div class="section pt-32 flex flex-col items-center text-center h-screen bg-gray-200 m-1 md:m-4 border-2 rounded">
+        <p class="font-bold text-3xl">Please login to access the cart.</p>
+        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                stroke="#ed8936" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <a href="/"
+            class="flex text-white bg-orange-500 border-0 mx-auto mt-4 py-2 px-6 focus:outline-none hover:bg-orange-400 active:bg-orange-600 rounded">Login</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
